@@ -7,8 +7,6 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "circle-ci-094552747742"
-    key    = "terraform_backends/terraform-test/terraform.tfstate"
     region = "us-east-1"
   }
 }
