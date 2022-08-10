@@ -1,12 +1,15 @@
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${var.stack_name}_${var.env}"
+  }
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main"
+    Name = "${var.IGW_name}_${var.env}"
   }
 }
 
@@ -24,7 +27,7 @@ resource "aws_route_table" "main-route-table" {
   }
 
   tags = {
-    Name = "main-route-table"
+    Name = "${var.Route_Table_name}_${var.env}"
   }
 }
 
@@ -34,7 +37,7 @@ resource "aws_subnet" "main" {
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "main"
+    Name = "${var.SUBNET_name}_${var.env}"
   }
 }
 
@@ -78,7 +81,7 @@ resource "aws_security_group" "allow_web" {
   }
 
   tags = {
-    Name = "allow_web"
+    Name = "${var.Security_Group_name}_${var.env}"
   }
 }
 
@@ -93,6 +96,9 @@ resource "aws_eip" "lb" {
   network_interface         = aws_network_interface.test.id
   associate_with_private_ip = "10.0.1.50"
   depends_on                = [aws_internet_gateway.gw]
+  tags = {
+    Name = "${var.EIP_name}_${var.env}"
+  }
 }
 
 resource "aws_instance" "web-server" {
@@ -112,6 +118,6 @@ resource "aws_instance" "web-server" {
               sudo bash -c 'echo your very first web server > /var/www/html/index.html'
               EOF
   tags = {
-    Name = "web-server"
+    Name = "${var.EC2_name}_${var.env}"
   }
 }
