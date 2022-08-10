@@ -19,6 +19,8 @@ jobs:
 
     steps:
 
+    - name: Set ENVIRONMENT to dev if merge was done on main
+      run: echo "ENVS=dev" >> $GITHUB_ENV
     - name: Checkout
       uses: actions/checkout@v3
 
