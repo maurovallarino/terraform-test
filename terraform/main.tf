@@ -1,7 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -9,7 +9,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_route_table" "main-route-table" {
   }
 
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "main" {
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -81,7 +81,7 @@ resource "aws_security_group" "allow_web" {
   }
 
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -97,7 +97,7 @@ resource "aws_eip" "lb" {
   associate_with_private_ip = "10.0.1.50"
   depends_on                = [aws_internet_gateway.gw]
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
 
@@ -118,6 +118,6 @@ resource "aws_instance" "web-server" {
               sudo bash -c 'echo your very first web server > /var/www/html/index.html'
               EOF
   tags = {
-    Name = "${var.stack_name}_${var.env}"
+    Name = "${var.stack_name}_${var.environment}"
   }
 }
