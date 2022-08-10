@@ -19,8 +19,8 @@ resource "aws_route_table" "main-route-table" {
   }
 
   route {
-    ipv6_cidr_block        = "::/0"
-    gateway_id = aws_internet_gateway.gw.id
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.gw.id
   }
 
   tags = {
@@ -29,8 +29,8 @@ resource "aws_route_table" "main-route-table" {
 }
 
 resource "aws_subnet" "main" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
 
   tags = {
@@ -49,32 +49,32 @@ resource "aws_security_group" "allow_web" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description      = "HTTPS"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "HTTPS"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-    ingress {
-    description      = "HTTP"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-    ingress {
-    description      = "SSH"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -89,19 +89,19 @@ resource "aws_network_interface" "test" {
 }
 
 resource "aws_eip" "lb" {
-  vpc                = true
-  network_interface  = aws_network_interface.test.id
+  vpc                       = true
+  network_interface         = aws_network_interface.test.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on = [aws_internet_gateway.gw]
+  depends_on                = [aws_internet_gateway.gw]
 }
 
 resource "aws_instance" "web-server" {
-  ami = "ami-052efd3df9dad4825"
-  instance_type = "t2.micro"
+  ami               = "ami-052efd3df9dad4825"
+  instance_type     = "t2.micro"
   availability_zone = "us-east-1a"
-  key_name = "KeyPairTest"
+  key_name          = "KeyPairTest"
   network_interface {
-    device_index = 0
+    device_index         = 0
     network_interface_id = aws_network_interface.test.id
   }
   user_data = <<EOF
